@@ -1,4 +1,5 @@
---- psql "dbname='testdb' user='postgresql' password='password' host='localhost'" -f schema.sql
+--- psql "dbname='testdb' user='postgres' password='password' host='localhost'" -f schema.sql
+--- COPY votes FROM '/tmp/votes.tsv' DELIMITER E'\t' CSV HEADER;
 DROP TABLE userid CASCADE;
 DROP TABLE votes CASCADE;
 DROP TABLE images CASCADE;
@@ -14,7 +15,7 @@ CREATE TABLE votes (
 	study_id VARCHAR NOT NULL,
 	timestamp VARCHAR NOT NULL,
  	voter_uniqueid VARCHAR NOT NULL,
-	CHECK (choice = "left" OR choice = "right")
+	CHECK ((choice = 'left' OR choice = 'right') OR choice = 'equal')
 );
 
 CREATE TABLE images (
