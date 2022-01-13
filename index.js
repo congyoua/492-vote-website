@@ -36,6 +36,15 @@ app.get('/api/getImg', function (req, res) {
     }
 });
 
+app.put('/api/submit', function (req, res) {
+
+	if (!"pic_num1" in req.body || !"pic_num2" in req.body || !"choice" in req.body) {
+		return res.status(400).json({"error":'Missing required input'});
+	}
+
+	console.log(req.body);
+});
+
 app.use('/',express.static('static_content')); 
 
 app.listen(port, function () {
