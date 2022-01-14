@@ -56,13 +56,11 @@ function getImg(){
 
 
 function submit(choice){
-
         var nums = {
                 "pic_num1":pic_num1,
                 "pic_num2":pic_num2,
                 "choice":choice
         }
-        // Put request with uer JSON and credential
         $.ajax({ 
 	        method: "PUT", 
 		url: "/api/submit",
@@ -70,21 +68,20 @@ function submit(choice){
 		processData:false, 
 		contentType: "application/json; charset=utf-8",
 		dataType:"json"
-        // Update the new password to credential
 	}).done(function(data, text_status, jqXHR){
 		console.log("success");
 	}).fail(function(err){
-                alert(err.responseJSON.error);
+                console.log(err);
 	});
-        getImg();
+        
 }
 
 $(function(){
         
         $("#images").hide();
         $("#welcome").show();
-        $("#start").on('click',function(){ getImg(); });
-        $("#option1").on('click',function(){ submit(1); });
-        $("#option2").on('click',function(){ submit(2); });
-        $("#option3").on('click',function(){ submit(3); });
+        $("#start").on('click',function(){ getImg(); $("#welcome").hide();});
+        $("#option1").on('click',function(){ submit(1); getImg();});
+        $("#option2").on('click',function(){ submit(2); getImg();});
+        $("#option3").on('click',function(){ submit(3); getImg();});
 });
