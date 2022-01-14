@@ -20,7 +20,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
 
-app.get('/api/getId', async function (req, res) {
+app.get('/api/getId', function (req, res) {
 
 	let sql = 'INSERT INTO userid(id) VALUES (DEFAULT) RETURNING id;';
 	pool.query(sql, [], (err, pgRes) => {
