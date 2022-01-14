@@ -43,6 +43,8 @@ app.put('/api/submit', function (req, res) {
 	}
 
 	console.log(req.body);
+	res.status(200).send();
+
 });
 
 app.use('/',express.static('static_content')); 
