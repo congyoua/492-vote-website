@@ -101,7 +101,7 @@ function submit(choice){
 $(function(){
         $("#images").hide();
         $("#welcome").show();
-        getId();
+        while(id === -1)getId();
         $("#start").on('click',function(){ getImg(); $("#welcome").hide();});
         $("#option1").on('click',function(){ submit(1); getImg();});
         $("#option2").on('click',function(){ submit(2); getImg();});

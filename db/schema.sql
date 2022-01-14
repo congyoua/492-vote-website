@@ -1,5 +1,5 @@
 --- psql "dbname='testdb' user='postgres' password='password' host='localhost'" -f schema.sql
---- COPY votes FROM '/tmp/votes.tsv' DELIMITER E'\t' CSV HEADER;
+--- COPY images FROM '/tmp/images.csv' DELIMITER E',' CSV HEADER;
 DROP TABLE userid CASCADE;
 DROP TABLE votes CASCADE;
 
@@ -16,5 +16,11 @@ CREATE TABLE votes (
 	timestamp VARCHAR NOT NULL,
  	voter_uniqueid VARCHAR NOT NULL,
 	CHECK ((choice = 'left' OR choice = 'right') OR choice = 'equal')
+);
+
+
+CREATE TABLE images (
+	id INT PRIMARY KEY,
+	file_name VARCHAR(255) NOT NULL
 );
 

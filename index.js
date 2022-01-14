@@ -35,7 +35,7 @@ app.get('/api/getId', async function (req, res) {
 
 app.get('/api/getNum', function (req, res) {
 	res.status(200);
-	res.json({"num":randint(1,7)}); 
+	res.json({"num":randint(0,99)}); 
 });
 
 app.get('/api/getImg', function (req, res) {
@@ -43,8 +43,14 @@ app.get('/api/getImg', function (req, res) {
     if (!req.headers.authorization) {
 		return res.status(403);
   	}else{
-        
-	    res.sendFile(__dirname +'/images/' + req.headers.authorization + '.JPG');
+        let sql = 'SELECT file_name from images where id=$1;';
+		pool.query(sql, [req.headers.authorization], (err, pgRes) => {
+			if (err || pgRes.rowCount != 1) {
+				res.status(500).json({"error":'database error'});
+			}
+			res.status(200).sendFile(__dirname +'/images/' + pgRes.rows[0].file_name);
+
+		});
     }
 });
 
@@ -54,10 +60,10 @@ app.put('/api/submit', function (req, res) {
 		return res.status(400).json({"error":'Missing required input'});
 	}
 	var choice = ['left','equal','right'][req.body.choice-1];
-	console.log([choice,req.body.pic_num1,req.body.pic_num2, Date.now().toString(), req.body.id]);
+	console.log([choice,req.body.pic_num1,req.body.pic_num2, new Date().toISOString(), req.body.id]);
 	let sql = 'INSERT INTO votes(id, choice, \"left\", \"right\", study_id, timestamp, voter_uniqueid) VALUES (DEFAULT, $1, $2, $3, 0, $4, $5);';
 
-	pool.query(sql, [choice,req.body.pic_num1,req.body.pic_num2, Date.now().toString(), req.body.id], (err, pgRes) => {
+	pool.query(sql, [choice,req.body.pic_num1,req.body.pic_num2, new Date().toISOString(), req.body.id], (err, pgRes) => {
 
 		if (err) {
 			console.log(err.message);
