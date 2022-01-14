@@ -25,3 +25,4 @@ CREATE TABLE images (
 	file_name VARCHAR(255) NOT NULL
 );
 
+COPY images FROM '/tmp/images.csv' DELIMITER E',' CSV HEADER;
