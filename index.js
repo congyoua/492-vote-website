@@ -12,7 +12,7 @@ const pool = new Pool({
 });
 
 const bodyParser = require('body-parser');
-
+var firstN = 25;
 
 
 
@@ -34,8 +34,25 @@ app.get('/api/getId', function (req, res) {
 
 
 app.get('/api/getNum', function (req, res) {
-	res.status(200);
-	res.json({"num":randint(0,99)}); 
+	if (!"record" in req.query) {
+		return res.status(400).json({"error":'Missing required input'});
+	}else{
+		if(req.query.record<firstN){
+			let sql = 'SELECT file_name1, file_name2 from orders where id=$1;';
+			pool.query(sql, [req.query.record], (err, pgRes) => {
+				if (err || pgRes.rowCount != 1) {
+					res.status(500).json({"error":'database error'});
+				}else{
+					res.status(200);
+					res.json({"num":[pgRes.rows[0].file_name1,pgRes.rows[0].file_name2]}); 
+				}	
+			});		
+		}else{
+			res.status(200);
+			res.json({"num":[randint(0,99),randint(0,99)]}); 
+		}
+		
+	}
 });
 
 app.get('/api/getImg', function (req, res) {

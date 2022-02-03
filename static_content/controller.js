@@ -1,5 +1,6 @@
 var pic_num1,pic_num2;
 var id = -1;
+var img_record = 1;
 
 function getId(){
         $.ajax({
@@ -20,30 +21,28 @@ function getId(){
 }  
 
 function getNum(){
-        var num = -1;
+        var num = [-1,-1];
         $.ajax({
                 method: "GET",
                 url: "/api/getNum",
-                data: JSON.stringify({}),
-                processData:false,
+                data: {"record":img_record},
                 contentType: "application/json; charset=utf-8",
-                dataType:"json",
                 async: false
         }).done(function(data, text_status, jqXHR){
                 num = data.num;
-
+                img_record++;
         }).fail(function(err){
                 alert(err.responseJSON.error);
-
-        });
+        });     
         return num;
 }   
 
 function getImg(){
         $("#images").show();
         $("#welcome").hide();
-        pic_num1 = getNum();
-        pic_num2 = getNum();
+        var pic_nums = getNum()
+        pic_num1 = pic_nums[0];
+        pic_num2 = pic_nums[1];
 
         $.ajax({
                 url: "/api/getImg",

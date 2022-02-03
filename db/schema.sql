@@ -1,5 +1,6 @@
 --- psql "dbname='testdb' user='postgres' password='password' host='localhost'" -f schema.sql
 --- COPY images FROM '/tmp/images.csv' DELIMITER E',' CSV HEADER;
+---COPY orders FROM '/tmp/order.csv' DELIMITER E',' CSV HEADER;
 DROP TABLE userid CASCADE;
 DROP TABLE votes CASCADE;
 DROP TABLE images CASCADE;
@@ -25,4 +26,11 @@ CREATE TABLE images (
 	file_name VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE orders (
+	id INT PRIMARY KEY,
+	file_name1 VARCHAR(255) NOT NULL,
+	file_name2 VARCHAR(255) NOT NULL
+);
+
 COPY images FROM '/tmp/images.csv' DELIMITER E',' CSV HEADER;
+COPY orders FROM '/tmp/order.csv' DELIMITER E',' CSV HEADER;
