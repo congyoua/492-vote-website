@@ -12,7 +12,7 @@ const pool = new Pool({
 });
 
 const bodyParser = require('body-parser');
-
+var firstN = 25;
 
 
 
@@ -34,6 +34,7 @@ app.get('/api/getId', function (req, res) {
 
 
 app.get('/api/getNum', function (req, res) {
+<<<<<<< HEAD
 	res.status(200);
 	let num1 = randint(0, 98);
 	let num2 = randint(0, 98);
@@ -41,6 +42,27 @@ app.get('/api/getNum', function (req, res) {
 		num2 = randint(0, 98);
 	}
 	res.json({"num1":num1, "num2": num2}); 
+=======
+	if (!"record" in req.query) {
+		return res.status(400).json({"error":'Missing required input'});
+	}else{
+		if(req.query.record<firstN){
+			let sql = 'SELECT file_name1, file_name2 from orders where id=$1;';
+			pool.query(sql, [req.query.record], (err, pgRes) => {
+				if (err || pgRes.rowCount != 1) {
+					res.status(500).json({"error":'database error'});
+				}else{
+					res.status(200);
+					res.json({"num":[pgRes.rows[0].file_name1,pgRes.rows[0].file_name2]}); 
+				}	
+			});		
+		}else{
+			res.status(200);
+			res.json({"num":[randint(0,99),randint(0,99)]}); 
+		}
+		
+	}
+>>>>>>> 954e72b0f0503b8c2e87a9fcfb1ccd8314d67f11
 });
 
 app.get('/api/getImg', function (req, res) {
