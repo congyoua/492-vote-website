@@ -1,6 +1,7 @@
 var pic_num1,pic_num2;
 var id = -1;
 
+// Get user's unique id
 function getId(){
         $.ajax({
                 method: "GET",
@@ -19,6 +20,7 @@ function getId(){
 
 }  
 
+// Get id for images
 function getNum(){
         var num = -1;
         $.ajax({
@@ -30,7 +32,8 @@ function getNum(){
                 dataType:"json",
                 async: false
         }).done(function(data, text_status, jqXHR){
-                num = data.num;
+                num = {num1: data.num1, num2: data.num2};
+                // console.log(num);
 
         }).fail(function(err){
                 alert(err.responseJSON.error);
@@ -39,11 +42,13 @@ function getNum(){
         return num;
 }   
 
+// Get images from server
 function getImg(){
         $("#images").show();
         $("#welcome").hide();
-        pic_num1 = getNum();
-        pic_num2 = getNum();
+        let nums = getNum();
+        pic_num1 = nums.num1;
+        pic_num2 = nums.num2;
 
         $.ajax({
                 url: "/api/getImg",

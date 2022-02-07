@@ -35,7 +35,12 @@ app.get('/api/getId', function (req, res) {
 
 app.get('/api/getNum', function (req, res) {
 	res.status(200);
-	res.json({"num":randint(0,99)}); 
+	let num1 = randint(0, 98);
+	let num2 = randint(0, 98);
+	while(num2 === num1){
+		num2 = randint(0, 98);
+	}
+	res.json({"num1":num1, "num2": num2}); 
 });
 
 app.get('/api/getImg', function (req, res) {
