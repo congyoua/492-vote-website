@@ -31,14 +31,8 @@ function getNum(){
                 contentType: "application/json; charset=utf-8",
                 async: false
         }).done(function(data, text_status, jqXHR){
-<<<<<<< HEAD
-                num = {num1: data.num1, num2: data.num2};
-                // console.log(num);
-
-=======
                 num = data.num;
                 img_record++;
->>>>>>> 954e72b0f0503b8c2e87a9fcfb1ccd8314d67f11
         }).fail(function(err){
                 alert(err.responseJSON.error);
         });     
@@ -49,15 +43,9 @@ function getNum(){
 function getImg(){
         $("#images").show();
         $("#welcome").hide();
-<<<<<<< HEAD
-        let nums = getNum();
-        pic_num1 = nums.num1;
-        pic_num2 = nums.num2;
-=======
-        var pic_nums = getNum()
+        var pic_nums = getNum();
         pic_num1 = pic_nums[0];
         pic_num2 = pic_nums[1];
->>>>>>> 954e72b0f0503b8c2e87a9fcfb1ccd8314d67f11
 
         $.ajax({
                 url: "/api/getImg",
