@@ -102,6 +102,17 @@ app.put('/api/submit', function (req, res) {
 
 });
 
+//Get picture numbers and corresponding model prediction
+//to be implemented
+app.get('/api/getRes', function (req, res) {
+});
+
+//fetch and log the record uploaded which shows whether the user thinks the prediction is correct
+//to be implemented
+app.put('/api/submit2', function (req, res) {
+
+});
+
 app.use('/',express.static('static_content')); 
 
 app.listen(port, function () {
