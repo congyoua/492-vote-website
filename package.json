@@ -10,7 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "base64-img": "^1.0.4",
+    "child_process": "^1.0.2",
     "express": "^4.17.2",
+    "fs": "0.0.1-security",
     "pg": "^8.7.1"
   }
 }
