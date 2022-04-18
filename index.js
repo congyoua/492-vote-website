@@ -106,14 +106,20 @@ app.put('/api/submit', function (req, res) {
 
 });
 
+//服务端这边收到train请求，调用命令行运行python训练模型
 app.put('/api/train', function (req, res) {
 
 	if (!"id" in req.body) {
 		return res.status(400).json({"error":'Missing required input'});
 	}
+	//这行的意思是，在一个terminal运行“python3 train.py” 
+	//如果需要加别的param就在['train.py']中加就好了,比如改成spawn('python3',['train.py'，JSON.stringify(list)])
+	//也可以把用户投票数据当作json或者长string喂给python，在python那边parse argv
+	//注：没想到其他好办法，也可以用stdin/stdout，但是害怕后面把其他的东西也输过去了，不如还是当作param传进去最保险。
+	//而且由于前端框架本质，这个客户端那边可能因为等太久timeout了，如果脚本运行太久还得promise函数包一下让它运行完。嗨，不好弄，实在做不完就算了
 	spawn('python3',['train.py']).stdout.on('data',function(re,err){
 		var result = re.toString();
-		
+		//告诉客户端，训练完了，可以显示新页面了
 		if(parseInt(result) === 1){
 			console.log("finish training");
 			res.status(200).json({"message":"success"});
@@ -124,13 +130,15 @@ app.put('/api/train', function (req, res) {
 
 });
 
-//Get picture numbers and corresponding model prediction
+
+//客户端那边申请要一组结果来展示，那么我们先生成2个随机图片序列号
 app.get('/api/getRes', function (req, res) {
 	var file1 = '';
 	var file2 = '';
 	let n1 = randint(0,98);
 	let n2 = randint(0,98);
 	while(n1===n2){n2 = randint(0,98);}
+	//然后用序列号从数据库查出2个图片的文件名
 	let sql = 'SELECT file_name from images where id=$1;';
 	pool.query(sql, [n1], (err, pgRes) => {
 		file1 = __dirname +'/images/' + pgRes.rows[0].file_name;
@@ -146,9 +154,11 @@ app.get('/api/getRes', function (req, res) {
 			return;
 		}
 	});
+	//然后调python3，此行等于在terminal输入“python3 prediction.py ~/images/xxx.jpg ~/images/xx.jpg”
 	spawn('python3',['prediction.py',file1,file2]).stdout.on('data',function(re,err){
 		var result = re.toString();
 		if(parseInt(result)!== NaN){
+			//返回结果给客户端，格式是[图片序列号1，图片序列号2，结果]。 0/1/2代表<=>
 			console.log([n1,n2,result]);
 			res.status(200).json({"num":[n1,n2,parseInt(result)]});
 		}else{
